@@ -16,12 +16,17 @@ export default {
     methods: {
       async handleSubmit() {
         try {
-           // api.post('/login','post', this.formData).then(reponse=>{
-           //  console.log(reponse);
-        const csrf= await useNuxtApp()('/sanctum/csrf-cookie')
-          console.log(csrf)
+          fetch('http://127.0.0.1:8000/sanctum/csrf-cookie').then(response => {
+            console.log(response.values);
+            this.test=response.body;
+          })
+          //  api.get('/sanctum/csrf-cookie').then(reponse=>{
+          //  // api.post('/login','post', this.formData).then(reponse=>{
+          //   console.log( reponse);
+          //
           // });
-
+          // const csrf= await useNuxtApp()('/sanctum/csrf-cookie')
+          //   console.log(csrf)
         } catch (error) {
           console.error('Login failed:', error);
         }
@@ -33,6 +38,7 @@ export default {
 
 <template>
   <div class="relative flex items-center min-h-screen p-0 overflow-hidden bg-center bg-cover">
+    {{test}}
     <div class="container z-1">
       <div class="flex flex-wrap -mx-3">
         <div class="flex flex-col w-full max-w-full px-3 mx-auto lg:mx-0 shrink-0 md:flex-0 md:w-7/12 lg:w-5/12 xl:w-4/12">
