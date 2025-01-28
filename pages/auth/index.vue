@@ -16,21 +16,30 @@ export default {
     methods: {
       async handleSubmit() {
         try {
-          fetch('http://127.0.0.1:8000/sanctum/csrf-cookie').then(response => {
-            console.log(response.values);
-            this.test=response.body;
-          })
-          //  api.get('/sanctum/csrf-cookie').then(reponse=>{
-          //  // api.post('/login','post', this.formData).then(reponse=>{
-          //   console.log( reponse);
-          //
-          // });
-          // const csrf= await useNuxtApp()('/sanctum/csrf-cookie')
-          //   console.log(csrf)
+          // Assuming you're sending a POST request with login credentials
+          const response = await fetch('http://localhost:8000/api/loginUser', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.formData),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Login successful:', data);
+
+            // Store the token in localStorage
+            localStorage.setItem('auth_token', data.token);  // Store token in localStorage
+            this.$router.push('/dashboard');  // Navigate to the dashboard or any protected route
+          } else {
+            console.error('Login failed:', response.statusText);
+          }
         } catch (error) {
           console.error('Login failed:', error);
         }
-      },
+      }
+
     },
 }
 
