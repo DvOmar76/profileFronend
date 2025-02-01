@@ -128,25 +128,25 @@ export default {
 <style scoped>
 
 </style>
-<!--<div v-for="(experience,index) in experiences " :key="experience.title" class="flex relative pt-10 pb-20 sm:items-center md:w-2/3 mx-auto">-->
+<!--<div v-for="(experiences,index) in experiences " :key="experiences.title" class="flex relative pt-10 pb-20 sm:items-center md:w-2/3 mx-auto">-->
 <!--<div class="h-full w-6 absolute inset-0 flex items-center justify-center">-->
 <!--  <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>-->
 <!--</div>-->
 <!--<div class="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-indigo-500 text-white relative z-10 title-font font-medium text-sm">{{index+1}}</div>-->
 <!--<div class="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">-->
-<!--  <a :href="experience.link" target="_blank" class="hover:hover:-translate-y-1 hover:scale-110 hover:shadow-xl duration-300  transition ease-in-out delay-150 flex-shrink-0 w-24 h-24 bg-indigo-100 text-indigo-500 rounded-full inline-flex items-center justify-center">-->
-<!--    <img :src="experience.imageUrl" :alt="experience.title" class="flex-shrink-0 w-24 h-24 bg-indigo-100 text-indigo-500 rounded-full inline-flex items-center justify-center">-->
+<!--  <a :href="experiences.link" target="_blank" class="hover:hover:-translate-y-1 hover:scale-110 hover:shadow-xl duration-300  transition ease-in-out delay-150 flex-shrink-0 w-24 h-24 bg-indigo-100 text-indigo-500 rounded-full inline-flex items-center justify-center">-->
+<!--    <img :src="experiences.imageUrl" :alt="experiences.title" class="flex-shrink-0 w-24 h-24 bg-indigo-100 text-indigo-500 rounded-full inline-flex items-center justify-center">-->
 <!--  </a>-->
 <!--  <div class="flex-grow  sm:pl-6 mt-6 sm:mt-0 ">-->
 <!--    <div class=" bg-gray-100 rounded-xl p-2 w-fit">-->
-<!--      <h2 class="font-medium title-font text-gray-900 mb-1 text-xl">{{experience.title}}</h2>-->
-<!--      <p class="leading-relaxed text-xs">{{experience.start}} - {{experience.end}} <span class="font-bold">{{experience.total}}</span></p>-->
-<!--      <p class="leading-relaxed ">{{experience.description}}</p>-->
+<!--      <h2 class="font-medium title-font text-gray-900 mb-1 text-xl">{{experiences.title}}</h2>-->
+<!--      <p class="leading-relaxed text-xs">{{experiences.start}} - {{experiences.end}} <span class="font-bold">{{experiences.total}}</span></p>-->
+<!--      <p class="leading-relaxed ">{{experiences.description}}</p>-->
 <!--    </div>-->
 <!--    <p>skills: </p>-->
 <!--    <div class="grid grid-cols-3 gap-1 rounded w-fit ">-->
 <!--      <div-->
-<!--          v-for="skill in experience.skills"-->
+<!--          v-for="skill in experiences.skills"-->
 <!--          :key="skill.id || skill.title"-->
 <!--          class="m-1 p-1 rounded text-center bg-indigo-500 duration-300 transition ease-in-out delay-150"-->
 <!--      >-->

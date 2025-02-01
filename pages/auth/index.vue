@@ -7,7 +7,7 @@ export default {
       test:[],
       formData:{
         email: 'test@example.com',
-        password: 'password123',
+        password: 'password',
         rememberMe: false,
       },
       inputClass:'w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out'
@@ -31,7 +31,7 @@ export default {
 
             // Store the token in localStorage
             localStorage.setItem('auth_token', data.token);  // Store token in localStorage
-            this.$router.push('/dashboard');  // Navigate to the dashboard or any protected route
+            this.$router.push('/dashboard');  // Navigate to the dashboard.vue or any protected route
           } else {
             console.error('Login failed:', response.statusText);
           }
