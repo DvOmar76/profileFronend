@@ -8,7 +8,7 @@
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-2">Title (Arabic)</label>
             <input
-                v-model="course.titleAr"
+                v-model="header.titleAr"
                 type="text"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition ease-in-out"
                 placeholder="Enter title in Arabic"
@@ -18,7 +18,7 @@
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-2">Title (English)</label>
             <input
-                v-model="course.titleEn"
+                v-model="header.titleEn"
                 type="text"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition ease-in-out"
                 placeholder="Enter title in English"
@@ -32,7 +32,7 @@
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-2">Description (Arabic)</label>
             <textarea
-                v-model="course.descriptionAr"
+                v-model="header.descriptionAr"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition ease-in-out"
                 rows="4"
                 placeholder="Enter description in Arabic"
@@ -42,7 +42,7 @@
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-2">Description (English)</label>
             <textarea
-                v-model="course.descriptionEn"
+                v-model="header.descriptionEn"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition ease-in-out"
                 rows="4"
                 placeholder="Enter description in English"
@@ -127,7 +127,7 @@ definePageMeta({
 export default {
   data() {
     return {
-      course: {
+      header: {
         type:"",
         titleAr: "",
         descriptionAr: "",
@@ -139,13 +139,14 @@ export default {
     };
   },
   async mounted() {
-    await this.fetchCourse();
+    await this.fetchHeader();
   },
   methods: {
-    async fetchCourse() {
+    async fetchHeader() {
       try {
-        const response = await api.get(`/api/en/courses/${this.$route.params.id}`);
-        this.course = response.data;
+        const response = await api.get(`/api/en/header/${this.$route.params.id}`);
+        this.header = response.data;
+        console.log(response.data)
       } catch (error) {
         console.error("Error fetching course:", error);
       }

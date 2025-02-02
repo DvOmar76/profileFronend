@@ -26,6 +26,7 @@ export default {
     async editHeader(headerId) {
       // Implement edit functionality
       this.$router.push('/dashboard/header/edit/' + headerId);
+      console.log(headerId)
     },
     async deleteHeader(headerId) {
       // Implement delete functionality
