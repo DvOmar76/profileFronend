@@ -10,9 +10,7 @@
         </div>
       </div>
 
-
-      <!-- Courses Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-min">
         <div
             v-for="course in courses"
             :key="course.id"
@@ -51,13 +49,23 @@
 
             <!-- Course Description -->
             <div class="text-left">
-              <p class="leading-relaxed text-base text-gray-600 mb-4">
-                {{ truncateDescription(course.description, 150) }}
-              </p>
+              <div
+                  class="overflow-hidden transition-all duration-500 ease-in-out"
+                  :style="{
+              height: course.showFullDescription ? `${course.descriptionHeight}px` : '6rem',
+            }"
+                  ref="description"
+              >
+                <p class="leading-relaxed text-base text-gray-600 mb-4">
+                  {{ course.showFullDescription ? course.description : truncateDescription(course.description, 150) }}
+                </p>
+              </div>
               <button
                   v-if="course.description.length > 150"
-                  class="text-indigo-500 hover:text-indigo-700 transition-colors duration-300">
-              Read More
+                  @click="toggleDescription(course)"
+                  class="text-indigo-500 hover:text-indigo-700 transition-colors duration-300 focus:outline-none "
+              >
+                {{ course.showFullDescription ? 'Read Less' : 'Read More' }}
               </button>
             </div>
 
@@ -71,8 +79,7 @@
             </a>
           </div>
         </div>
-      </div>
-    </div>
+      </div>    </div>
     <hr class="mb-5 border-gray-300" />
   </section>
 </template>
@@ -92,7 +99,7 @@ export default {
       title: '',
       description: '',
       courses: [],
-      showFullDescription: {} // Tracks whether to show full description for each course
+
     };
   },
   watch: {
@@ -106,6 +113,7 @@ export default {
     }
   },
   methods: {
+
     getHeaders() {
       api.get(`/api/${this.lang}/header`).then(headers => {
         const header = headers.data.find(header => header.type === 'courses');
@@ -115,9 +123,35 @@ export default {
         }
       });
     },
+    toggleDescription(course) {
+      // Toggle the showFullDescription state
+      course.showFullDescription = !course.showFullDescription;
+
+      // Calculate the full height of the description
+      this.$nextTick(() => {
+        const descriptionElement = this.$refs.description[this.courses.indexOf(course)];
+        if (course.showFullDescription) {
+          // Expand to full height
+          course.descriptionHeight = descriptionElement.scrollHeight;
+        } else {
+          // Collapse to truncated height
+          course.descriptionHeight = 96; // 6rem in pixels (6 * 16px)
+        }
+      });
+    },
     getCourses() {
       api.get(`/api/${this.lang}/courses`).then(courses => {
-        this.courses = courses.data;
+        this.courses = courses.data.map((course,index) => {
+         return{
+           id: course.id,
+           title: course.title,
+           description: course.description,
+           imageUrl: course.imageUrl,
+           certificateUrl: course.certificateUrl,
+           showFullDescription:false,
+           index:index
+         }
+        });
       });
     },
     truncateDescription(text, limit) {

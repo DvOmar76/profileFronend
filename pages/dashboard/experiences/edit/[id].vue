@@ -2,7 +2,7 @@
   <div class="p-10 bg-gray-50 min-h-screen rounded-xl flex justify-center items-center">
     <div class="max-w-4xl w-full bg-white p-8 rounded-lg shadow-lg">
       <h1 class="text-3xl font-semibold text-center mb-8 text-gray-800">Edit Experience</h1>
-      <form @submit.prevent="updateExperience" class="space-y-8">
+      <form  @submit.prevent="updateExperience" class="space-y-8">
         <!-- Title Fields -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="mb-4">
@@ -161,7 +161,7 @@
             </span>
           </div>
         </div>
-<div class="mb-6">
+        <div class="mb-6">
           <label class="block text-sm font-medium text-gray-700 mb-2">image</label>
           <div class="flex items-center">
             <input
@@ -172,6 +172,7 @@
             />
             <button
                 type="button"
+                onchange="handleImageUpload"
                 @click="$refs.imageInput.click()"
                 class="px-5 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition ease-in-out duration-200"
             >
@@ -199,6 +200,7 @@
 
 <script>
 import api from "~/API/api.js";
+import axios from "axios";
 
 definePageMeta({
   layout: 'dashboard'
@@ -221,7 +223,7 @@ export default {
         end: "",
       },
       certificateFile: null, // Store the uploaded certificate file
-      imageFile: null, // Store the uploaded certificate file
+      imageFile: null, // Store the uploaded image file
     };
   },
   async mounted() {
@@ -244,9 +246,16 @@ export default {
       }
     },
 
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.imageFile = file;
+      }
+    },
+
     async updateExperience() {
       try {
-        const formData = new FormData();
+        const formData = new URLSearchParams();
 
         // Append all experience fields to FormData
         Object.keys(this.experience).forEach((key) => {
@@ -256,12 +265,18 @@ export default {
         // Append the certificate file if it exists
         if (this.certificateFile) {
           formData.append("certificateUrl", this.certificateFile);
+        } else {
+          // If no new certificate file is uploaded, append the existing URL
+          formData.append("certificateUrl", this.experience.certificateUrl || "");
         }
+
+        // Append the image file if it exists
         if (this.imageFile) {
-          console.log(this.imageFile,'this.imageFile')
-          formData.append("imageUrl", 'http://localhost:8000/storage/public/experience/679d3f48e3f10.jpeg');
+          formData.append("imageUrl", this.imageFile);
+        } else {
+          // If no new image file is uploaded, append the existing URL
+          formData.append("imageUrl", this.experience.imageUrl || "");
         }
-        console.log(formData)
 
         // Log FormData contents for debugging
         for (let [key, value] of formData.entries()) {
@@ -269,21 +284,21 @@ export default {
         }
 
         // Make the API request to update the experience
-        // const response = await api.put(
-        //     `/api/en/experiences/${this.$route.params.id}`,
-        //     formData,
-        //     {
-        //       headers: {
-        //         "Content-Type": "multipart/form-data",
-        //       },
-        //     }
-        // );
-
-const response = fetch(`http://127.0.0.1:8000/api/ar/experiences/${this.$route.params.id}`, {method:'put', body: formData});
+        const response = await axios.put(
+            `http://127.0.0.1:8000/api/ar/experiences/${this.$route.params.id}`,
+            formData,
+            {
+              headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                'body':'form-data'
+              },
+            }
+        );
 
         console.log(response, 'response');
 
-        if (response && response.message === 'Experience updated successfully') {
+        if (response && response.data.message === 'Experience updated successfully') {
           // Optionally, redirect to the experience list or show a success message
           // this.$router.push("/dashboard/experiences");
         } else {
@@ -292,11 +307,9 @@ const response = fetch(`http://127.0.0.1:8000/api/ar/experiences/${this.$route.p
       } catch (error) {
         console.error("Error updating experience:", error);
       }
-    },
-  },
+    }  },
 };
 </script>
-
 <style scoped>
 /* Add custom styles */
 </style>

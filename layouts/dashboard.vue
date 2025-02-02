@@ -24,7 +24,7 @@
     >
       <div class="h-19">
         <router-link to="/" class="block px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700">
-          <span class="ml-1 font-semibold">Argon Dashboard 2</span>
+          <span class="ml-1 font-semibold text-2xl">Profile</span>
         </router-link>
       </div>
 
@@ -34,15 +34,14 @@
       <div class="w-auto max-h-screen overflow-auto">
         <ul class="flex flex-col pl-0 mb-0">
           <li class="mt-0.5 w-full">
-            <a
+            <button @click="navigateTo('')"
                 class="py-2.7 bg-blue-500/13 text-sm my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700"
-                href="../pages/dashboard.html"
             >
               <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center">
                 <i class="relative top-0 leading-normal text-blue-500 ni ni-tv-2 text-sm"></i>
               </div>
               <span class="ml-1">Dashboard</span>
-            </a>
+            </button>
           </li>
 
           <li v-for="item in items" :key="item.title" class="mt-0.5 w-full">
@@ -56,26 +55,17 @@
               <span class="ml-1">{{ item.title }}</span>
             </button>
           </li>
+          <button
+              @click="logout"
+              class="py-2.7 text-sm my-0 mx-2 flex items-center whitespace-nowrap px-4 text-slate-700  "
+          >
+            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center">
+            </div>
+            <span class="ml-1 font-bold">Logout</span>
+          </button>
         </ul>
       </div>
 
-      <!-- Sidebar Footer -->
-<!--      <div class="mx-4">-->
-<!--        <a-->
-<!--            href="https://www.creative-tim.com/learning-lab/tailwind/html/quick-start/argon-dashboard/"-->
-<!--            target="_blank"-->
-<!--            class="inline-block w-full px-8 py-2 mb-4 font-bold leading-normal text-center text-white capitalize rounded-lg shadow-md bg-slate-700 hover:shadow-xs hover:-translate-y-px"-->
-<!--        >-->
-<!--          Documentation-->
-<!--        </a>-->
-<!--        <a-->
-<!--            href="https://www.creative-tim.com/product/argon-dashboard-pro-tailwind?ref=sidebarfree"-->
-<!--            target="_blank"-->
-<!--            class="inline-block w-full px-8 py-2 font-bold leading-normal text-center text-white rounded-lg shadow-md bg-blue-500 hover:shadow-xs hover:-translate-y-px"-->
-<!--        >-->
-<!--          Upgrade to pro-->
-<!--        </a>-->
-<!--      </div>-->
     </aside>
 
     <!-- Main Content -->
@@ -97,9 +87,53 @@ export default {
       ],
     };
   },
+  async mounted() {
+    const token = localStorage.getItem('auth_token'); // Fetch the token from localStorage
+    if (!token) {
+      // Redirect to login page if token is not found
+      this.$router.push('/auth');
+    } else {
+      try {
+        // Optionally, validate the token with the server
+        const response = await fetch('http://127.0.0.1:8000/api/validate-token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Invalid token');
+        }
+      } catch (error) {
+        console.error('Token validation failed:', error);
+        // If token is invalid, redirect to login
+        this.$router.push('/auth');
+      }
+    }
+  },
   methods: {
     navigateTo(page) {
       this.$router.push(`/dashboard/${page}`);
+    },
+    async logout() {
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        try {
+          await fetch('http://127.0.0.1:8000/api/logout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        } catch (error) {
+          console.error('Logout failed:', error);
+        }
+      }
+      // Clear token and redirect to login
+      localStorage.removeItem('auth_token');
+      this.$router.push('/auth');
     },
   },
 };
