@@ -2,6 +2,7 @@
 import api from "~/API/api.js";
 
 export default {
+  //
   data() {
     return {
       test:[],
