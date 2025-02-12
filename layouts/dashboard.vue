@@ -95,7 +95,7 @@ export default {
     } else {
       try {
         // Optionally, validate the token with the server
-        const response = await fetch('http://127.0.0.1:8000/api/validate-token', {
+        const response = await fetch('https://anime76.com/api/validate-token', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ export default {
       const token = localStorage.getItem('auth_token');
       if (token) {
         try {
-          await fetch('http://127.0.0.1:8000/api/logout', {
+          await fetch('https://anime76.com/api/logout', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

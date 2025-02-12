@@ -1,4 +1,4 @@
-const Base_URL='http://127.0.0.1:8000'
+const Base_URL='https://anime76.com'
 export default {
     // async makeRequest(resource, methode,body){
     //

@@ -18,7 +18,7 @@ export default {
       async handleSubmit() {
         try {
           // Assuming you're sending a POST request with login credentials
-          const response = await fetch('http://localhost:8000/api/loginUser', {
+          const response = await fetch('https://anime76.com/api/loginUser', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
